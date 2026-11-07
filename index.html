@@ -8,6 +8,7 @@
 header{background:#1c1b1f;color:#fff;padding:22px 16px 18px;text-align:center}
 header h1{margin:0;font-size:22px;letter-spacing:.08em}header p{margin:6px 0 0;font-size:13px;opacity:.8}
 .how{max-width:1100px;margin:14px auto 0;padding:0 16px;font-size:13px;color:var(--mut);text-align:center}
+.tabs{display:flex;max-width:1100px;margin:12px auto 0;padding:0 10px;gap:6px}.tabs button{flex:1;border:1px solid var(--ink);background:#fff;color:var(--ink);padding:10px 6px;border-radius:10px;font-weight:800;letter-spacing:.05em;font-size:12px;cursor:pointer}.tabs button.on{background:var(--ink);color:#fff}.sels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;max-width:1100px;margin:0 auto;padding:0 10px}.sels select{width:100%;padding:9px 6px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font-size:12.5px}.sels select.on{border-color:var(--ink);font-weight:700}.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:30px 10px;font-size:14px}.gyohead{max-width:1100px;margin:6px auto 0;padding:0 16px;text-align:center;font-size:13px;color:var(--mut)}.clr{display:block;margin:0 auto 4px;border:0;background:none;color:var(--mut);text-decoration:underline;font-size:12px;cursor:pointer}
 .filters{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:12px 16px}
 .filters button{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 10px;font-size:12px;cursor:pointer;color:var(--ink)}
 .filters button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -37,7 +38,7 @@ header h1{margin:0;font-size:22px;letter-spacing:.08em}header p{margin:6px 0 0;f
 </style></head><body>
 <header><h1>BLACK RUSH · TIÊ.</h1><p>Lista VIP · 14 e 15/11 · escolha cor e tamanho e toque em QUERO ESSA</p></header>
 <p class="how">Monte sua lista e envie no WhatsApp. No dia 14 às 8h você recebe o link com tudo na sacola e o cupom já aplicado.</p>
-<div class="filters" id="f"></div>
+<div class="tabs" id="tb"><button class="on" data-t="all">TODAS AS PEÇAS</button><button data-t="gyo">ACHADINHOS DA GYO</button></div><p class="gyohead" id="gh" hidden>As 10 peças preferidas da Gyo na Black Rush 💛</p><div class="filters" id="f"></div><div class="sels"><select id="fm"><option value="">Modelo</option></select><select id="fs"><option value="">Tamanho</option></select><select id="fc"><option value="">Cor</option></select></div><button class="clr" id="clr" hidden>limpar filtros</button>
 <main class="grid" id="g"></main>
 <div class="bar"><button class="see" id="see">Minha lista (0)</button><button class="send" id="send" disabled>Enviar no WhatsApp</button></div>
 <div class="sheet" id="sh"><div class="box"><h2>Minha lista</h2><div id="ls"></div><div class="tot" id="tot"></div><button class="send close" id="send2" style="background:#25d366;border:0;color:#0b2e17">Enviar no WhatsApp</button><button class="close" id="cl">Continuar escolhendo</button></div></div>
@@ -62,9 +63,24 @@ const n=L.filter(x=>x.id==p.id).length;ad.textContent=n?`✓ ${n} na sua lista`:
 p.c.forEach((c,i)=>{const b=document.createElement("button");b.textContent=c;b.onclick=()=>{C=C==i?-1:i;if(S>=0&&!ok(p,S,C))S=-1;if(C>=0)goCol(c);upd()};cc.appendChild(b)});
 p.sz.forEach((s,i)=>{const b=document.createElement("button");b.textContent=s;b.onclick=()=>{S=S==i?-1:i;if(C>=0&&!ok(p,S,C))C=-1;upd()};ss.appendChild(b)});
 w.onclick=()=>{L.push({id:p.id,n:p.n,c:C>=0?p.c[C]:"",s:S>=0?p.sz[S]:"",p:p.p});save();bar();upd();w.textContent="ADICIONADA ✓";setTimeout(upd,900)};
+el._pre=(sz,fam)=>{if(sz&&p.sz.includes(sz))S=p.sz.indexOf(sz);if(fam){const i=p.c.findIndex((c,ci)=>FAM(c)==fam&&(S<0||ok(p,S,ci)));if(i>=0){C=i;goCol(p.c[i])}}if(S>=0&&C>=0&&!ok(p,S,C))C=-1;upd()};
 el._u=upd;upd();return el}
+const GYO=/*GYO*/[];
+const CAT=n=>{n=n.toLowerCase();if(/maca[cq]|body/.test(n))return"Macaquinho e body";if(/vestido/.test(n))return"Vestido";if(/jaqueta|bolero|corta vento|moletom est/.test(n))return"3ª peça";if(/legging|calça/.test(n))return"Legging e calça";if(/short/.test(n))return"Short";if(/^(top|microtop|cropped)/.test(n))return"Top";return"Blusa e regata"};
+const FAM=c=>{c=c.toUpperCase();if(/PRETO/.test(c))return"Preto";if(/BRANCO|OFF/.test(c))return"Branco/off white";if(/BEGE/.test(c))return"Bege";if(/MARROM/.test(c))return"Marrom";if(/CINZA|CHUMBO/.test(c))return"Cinza";if(/AZUL/.test(c))return"Azul";if(/VERDE/.test(c))return"Verde";if(/ROSA/.test(c))return"Rosa";if(/VINHO|VERMELHO|HIBISCO/.test(c))return"Vinho";if(/LIL/.test(c))return"Lilás";if(/AMARELO/.test(c))return"Amarelo";return c};
+const fm=document.getElementById("fm"),fs=document.getElementById("fs"),fc=document.getElementById("fc"),clr=document.getElementById("clr");let TAB="all";
+const opt=(sel,arr)=>arr.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;sel.appendChild(o)});
+opt(fm,["Top","Legging e calça","Short","Macaquinho e body","Vestido","Blusa e regata","3ª peça"].filter(c=>P.some(p=>CAT(p.n)==c)));
+opt(fs,["PP","P","M","G"].filter(z=>P.some(p=>p.sz.includes(z))));
+opt(fc,[...new Set(P.flatMap(p=>p.c.map(FAM)))].sort((a,b)=>a.localeCompare(b,"pt")));
+[fm,fs,fc].forEach(x=>x.onchange=render);
+clr.onclick=()=>{fm.value=fs.value=fc.value="";FX="todos";[...f.children].forEach((x,i)=>x.classList.toggle("on",i==0));render()};
+document.querySelectorAll("#tb button").forEach(b=>b.onclick=()=>{TAB=b.dataset.t;document.querySelectorAll("#tb button").forEach(x=>x.classList.toggle("on",x==b));document.getElementById("gh").hidden=TAB!="gyo";render();window.scrollTo({top:document.getElementById("tb").offsetTop-8,behavior:"smooth"})});
 const els=P.map(card);
-function render(){g.innerHTML="";els.forEach((e,i)=>{if(FX=="todos"||P[i].fx==FX){e._u();g.appendChild(e)}})}
+function has(p,sz,fam){const si=sz?p.sz.indexOf(sz):-1;if(sz&&si<0)return false;if(!fam)return true;const cis=p.c.map((c,i)=>i).filter(i=>FAM(p.c[i])==fam);if(!cis.length)return false;if(!p.m||si<0)return true;return cis.some(ci=>ok(p,si,ci))}
+function render(){const M=fm.value,SZ=fs.value,CF=fc.value;[fm,fs,fc].forEach(x=>x.classList.toggle("on",!!x.value));clr.hidden=!(M||SZ||CF||FX!="todos");g.innerHTML="";let n=0;
+els.forEach((e,i)=>{const p=P[i];if(TAB=="gyo"&&!GYO.includes(p.n))return;if(FX!="todos"&&p.fx!=FX)return;if(M&&CAT(p.n)!=M)return;if(!has(p,SZ,CF))return;if(SZ||CF)e._pre(SZ,CF);else e._u();g.appendChild(e);n++});
+if(!n){const d=document.createElement("div");d.className="empty";d.textContent=TAB=="gyo"&&!GYO.length?"Em breve: a Gyo está escolhendo as peças dela 👀":"Nenhuma peça com esses filtros. Tente outra combinação.";g.appendChild(d)}}
 function msg(){let t="Oi! Quero estas peças da Black Rush:\n";L.forEach((x,i)=>{t+=`${i+1}. ${x.n}${x.c?" – "+x.c:""}${x.s?" – "+x.s:""} (${x.p})\n`});t+="\nCód: "+L.map(x=>[x.id,x.s,x.c].join("_")).join(";");return t}
 function send(){if(!L.length)return;window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(msg()),"_blank")}
 function bar(){document.getElementById("see").textContent=`Minha lista (${L.length})`;document.getElementById("send").disabled=!L.length;
