@@ -8,21 +8,21 @@
 header{background:#1c1b1f;color:#fff;padding:22px 16px 18px;text-align:center}
 header h1{margin:0;font-size:22px;letter-spacing:.08em}header p{margin:6px 0 0;font-size:13px;opacity:.8}
 .how{max-width:1100px;margin:14px auto 0;padding:0 16px;font-size:13px;color:var(--mut);text-align:center}
-.filters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:12px 16px}
-.filters button{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;color:var(--ink)}
+.filters{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:12px 16px}
+.filters button{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 10px;font-size:12px;cursor:pointer;color:var(--ink)}
 .filters button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.grid{max-width:1100px;margin:0 auto;padding:0 12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.grid{max-width:1100px;margin:0 auto;padding:0 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}@media(min-width:700px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}}
 .card{background:var(--card);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--line)}
 .ph{position:relative;aspect-ratio:3/4;background:#eee}.ph img{width:100%;height:100%;object-fit:cover;display:block}
-.fx{position:absolute;top:8px;left:8px;background:#1c1b1f;color:#fff;font-weight:700;font-size:12px;padding:4px 8px;border-radius:6px}
-.bd{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
-.nm{font-weight:600;font-size:14px}.pr{display:flex;gap:8px;align-items:baseline}.old{color:var(--mut);text-decoration:line-through;font-size:12px}.new{font-weight:800;font-size:17px}
-.lb{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 9px;font-size:12px;cursor:pointer;color:var(--ink);min-width:36px}
+.fx{position:absolute;top:6px;left:6px;background:#1c1b1f;color:#fff;font-weight:700;font-size:11px;padding:3px 6px;border-radius:6px}
+.bd{padding:9px;display:flex;flex-direction:column;gap:6px;flex:1}
+.nm{font-weight:600;font-size:13px;line-height:1.25}.pr{display:flex;gap:8px;align-items:baseline}.old{color:var(--mut);text-decoration:line-through;font-size:12px}.new{font-weight:800;font-size:15px}.pr{flex-wrap:wrap;gap:2px 6px!important}
+.lb{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chips button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 6px;font-size:10.5px;cursor:pointer;color:var(--ink);min-width:30px}
 .chips button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .chips button:disabled{opacity:.3;text-decoration:line-through;cursor:default}
-.want{margin-top:auto;border:0;background:var(--ink);color:#fff;font-weight:700;letter-spacing:.06em;padding:12px;border-radius:10px;cursor:pointer;font-size:13px}
+.want{margin-top:auto;border:0;background:var(--ink);color:#fff;font-weight:700;letter-spacing:.06em;padding:10px 4px;border-radius:9px;cursor:pointer;font-size:11.5px}
 .want:disabled{background:#c9c4bd;cursor:default}
 .added{font-size:12px;color:var(--ok);min-height:16px}
 .bar{position:fixed;left:0;right:0;bottom:0;background:#1c1b1f;color:#fff;padding:12px 16px;display:flex;gap:10px;align-items:center;justify-content:center;z-index:5;box-shadow:0 -4px 16px rgba(0,0,0,.15)}
@@ -54,7 +54,7 @@ function card(p){const el=document.createElement("article");el.className="card";
 el.innerHTML=`<div class="ph"><img loading="lazy" src="${p.img}" alt=""><span class="fx">-${p.fx}%</span></div><div class="bd"><div class="nm"></div><div class="pr"><span class="old">${p.o}</span><span class="new">${p.p}</span></div>${p.c.length?'<div class="lb">Cor</div><div class="chips cc"></div>':''}${p.sz.length?'<div class="lb">Tamanho</div><div class="chips ss"></div>':''}<div class="added"></div><button class="want">QUERO ESSA</button></div>`;
 el.querySelector(".nm").textContent=p.n;const cc=el.querySelector(".cc"),ss=el.querySelector(".ss"),w=el.querySelector(".want"),ad=el.querySelector(".added");
 function upd(){if(cc)[...cc.children].forEach((b,i)=>{b.classList.toggle("on",i==C);b.disabled=S>=0&&p.m&&!ok(p,S,i)});if(ss)[...ss.children].forEach((b,i)=>{b.classList.toggle("on",i==S);b.disabled=C>=0&&p.m&&!ok(p,i,C)});
-const need=(p.c.length&&C<0)||(p.sz.length&&S<0);w.disabled=need;w.textContent=need?(p.c.length&&C<0?"ESCOLHA A COR":"ESCOLHA O TAMANHO"):"QUERO ESSA";
+const need=(p.c.length&&C<0)||(p.sz.length&&S<0);w.disabled=need;w.textContent=need?(p.c.length&&C<0?"ESCOLHA A COR":"ESCOLHA TAMANHO"):"QUERO ESSA";
 const n=L.filter(x=>x.id==p.id).length;ad.textContent=n?`✓ ${n} na sua lista`:""}
 p.c.forEach((c,i)=>{const b=document.createElement("button");b.textContent=c;b.onclick=()=>{C=C==i?-1:i;if(S>=0&&!ok(p,S,C))S=-1;upd()};cc.appendChild(b)});
 p.sz.forEach((s,i)=>{const b=document.createElement("button");b.textContent=s;b.onclick=()=>{S=S==i?-1:i;if(C>=0&&!ok(p,S,C))C=-1;upd()};ss.appendChild(b)});
